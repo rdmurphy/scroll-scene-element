@@ -1,0 +1,43 @@
+{
+	"name": "scroll-scene-element",
+	"type": "module",
+	"version": "0.0.0",
+	"description": "A custom element for orchestrating scrollytelling elements.",
+	"main": "./dist/index.umd.js",
+	"module": "./dist/index.module.js",
+	"exports": "./dist/index.modern.js",
+	"types": "./dist/scroll-scene-element.d.ts",
+	"scripts": {
+		"build": "microbundle src/scroll-scene-element.ts --format modern,esm,umd",
+		"clean": "premove dist",
+		"prebuild": "npm run clean",
+		"pretest": "npm run build",
+		"start": "sirv . --dev --port 3000",
+		"test": "playwright test",
+		"watch": "microbundle watch src/scroll-scene-element.ts --format modern,esm,umd --no-compress"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rdmurphy/scroll-scene-element.git"
+	},
+	"keywords": [],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/rdmurphy/scroll-scene-element/issues"
+	},
+	"homepage": "https://github.com/rdmurphy/scroll-scene-element#readme",
+	"devDependencies": {
+		"@playwright/test": "^1.20.0",
+		"@rdm/prettier-config": "^2.0.0",
+		"@typescript-eslint/eslint-plugin": "^5.15.0",
+		"@typescript-eslint/parser": "^5.15.0",
+		"eslint": "^8.11.0",
+		"eslint-plugin-unicorn": "^41.0.1",
+		"microbundle": "^0.14.2",
+		"premove": "^4.0.0",
+		"prettier": "^2.6.0",
+		"sirv-cli": "^2.0.2",
+		"typescript": "^4.6.2"
+	},
+	"prettier": "@rdm/prettier-config"
+}
