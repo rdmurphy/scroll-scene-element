@@ -2,7 +2,11 @@
 import { test, expect } from '@playwright/test';
 
 // local
-import { scrollBelowElement, scrollToTopOfElement } from './helpers';
+import {
+	scrollBelowElement,
+	scrollTopOfElementToOffset,
+	scrollToTopOfElement,
+} from './helpers';
 
 test.describe('scroll-scene', () => {
 	test.describe('element creation', () => {
@@ -57,6 +61,35 @@ test.describe('scroll-scene', () => {
 						),
 				),
 				scrollBelowElement(locator),
+			]);
+		});
+
+		test('elements may have have custom offsets', async ({ page }) => {
+			await page.goto('/tests/fixtures/offset.html');
+
+			const defaultOffsetLocator = page.locator('scroll-scene:not([offset])');
+			const customOffsetLocator = page.locator('scroll-scene[offset]');
+
+			// smoke test to confirm default works as expected
+			await Promise.all([
+				defaultOffsetLocator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-enter', resolve),
+						),
+				),
+				scrollTopOfElementToOffset(defaultOffsetLocator, 0.5),
+			]);
+
+			// test custom offset
+			await Promise.all([
+				customOffsetLocator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-enter', resolve),
+						),
+				),
+				scrollTopOfElementToOffset(customOffsetLocator, 0.7),
 			]);
 		});
 	});

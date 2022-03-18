@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integration</title>
+  <script src="/dist/index.modern.js" type="module"></script>
+  <style>
+    body {
+      margin-bottom: 100vh;
+      margin-top: 100vh;
+    }
+
+    scroll-scene {
+      height: 500px;
+      width: 100%;
+    }
+
+    scroll-scene + scroll-scene {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <scroll-scene>Scene 1</scroll-scene>
+  <scroll-scene offset="0.7">Scene 2</scroll-scene>
+</body>
+</html>

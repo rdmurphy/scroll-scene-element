@@ -1,22 +1,19 @@
 // types
 import type { Locator } from '@playwright/test';
 
-export function scrollTopOfElementToViewportOffset(
-	locator: Locator,
-	offset: number,
-) {
+export function scrollTopOfElementToOffset(locator: Locator, offset: number) {
 	return locator.evaluate((element, offset) => {
 		window.scrollTo(
 			0,
 			element.getBoundingClientRect().top +
 				window.scrollY -
-				window.innerHeight * offset,
+				window.innerHeight * (1 - offset),
 		);
 	}, offset);
 }
 
 export function scrollToTopOfElement(locator: Locator) {
-	return scrollTopOfElementToViewportOffset(locator, 0.5);
+	return scrollTopOfElementToOffset(locator, 0.5);
 }
 
 export function scrollAboveElement(locator: Locator) {
