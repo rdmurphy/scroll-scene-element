@@ -1,4 +1,8 @@
+// packages
 import { test, expect } from '@playwright/test';
+
+// local
+import { scrollBelowElement, scrollToTopOfElement } from './helpers';
 
 test.describe('scroll-scene', () => {
 	test.describe('element creation', () => {
@@ -24,6 +28,36 @@ test.describe('scroll-scene', () => {
 			expect(await elementHandle.evaluate((element) => element.nodeName)).toBe(
 				'SCROLL-SCENE',
 			);
+		});
+	});
+
+	test.describe('functionality', () => {
+		test('fires an event on enter and exit', async ({ page }) => {
+			await page.goto('/tests/fixtures/integration.html');
+
+			const locator = page.locator('scroll-scene');
+
+			// enter
+			await Promise.all([
+				locator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-enter', resolve),
+						),
+				),
+				scrollToTopOfElement(locator),
+			]);
+
+			// exit
+			await Promise.all([
+				locator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-exit', resolve),
+						),
+				),
+				scrollBelowElement(locator),
+			]);
 		});
 	});
 });
