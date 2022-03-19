@@ -34,6 +34,10 @@ function createOffsetObserver(offset: number) {
 }
 
 class ScrollSceneElement extends HTMLElement {
+	static get observedAttributes() {
+		return ['offset'];
+	}
+
 	connectedCallback() {
 		const offset = this.offset;
 
@@ -57,8 +61,40 @@ class ScrollSceneElement extends HTMLElement {
 		}
 	}
 
+	attributeChangedCallback(
+		attribute: string,
+		previousValue: string,
+		newValue: string,
+	) {
+		if (attribute === 'offset') {
+			const previousOffset = Number.parseFloat(previousValue || '0.5');
+			const newOffset = Number.parseFloat(newValue);
+
+			if (previousOffset !== newOffset) {
+				const previousObserver = offsetObservers.get(previousOffset);
+
+				if (previousObserver) {
+					previousObserver.unobserve(this);
+				}
+
+				let newObserver = offsetObservers.get(newOffset);
+
+				if (!newObserver) {
+					newObserver = createOffsetObserver(newOffset);
+					offsetObservers.set(newOffset, newObserver);
+				}
+
+				newObserver.observe(this);
+			}
+		}
+	}
+
 	get offset() {
 		return Number.parseFloat(this.getAttribute('offset') || '0.5');
+	}
+
+	set offset(value: number) {
+		this.setAttribute('offset', value.toString());
 	}
 }
 

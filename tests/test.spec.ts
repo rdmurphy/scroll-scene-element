@@ -5,8 +5,12 @@ import { test, expect } from '@playwright/test';
 import {
 	scrollBelowElement,
 	scrollTopOfElementToOffset,
+	scrollToTop,
 	scrollToTopOfElement,
 } from './helpers';
+
+// types
+import type ScrollSceneElement from '../src/scroll-scene-element';
 
 test.describe('scroll-scene', () => {
 	test.describe('element creation', () => {
@@ -70,7 +74,7 @@ test.describe('scroll-scene', () => {
 			const defaultOffsetLocator = page.locator('scroll-scene:not([offset])');
 			const customOffsetLocator = page.locator('scroll-scene[offset]');
 
-			// smoke test to confirm default works as expected
+			// smoke test to confirm default works
 			await Promise.all([
 				defaultOffsetLocator.evaluate(
 					(element) =>
@@ -90,6 +94,65 @@ test.describe('scroll-scene', () => {
 						),
 				),
 				scrollTopOfElementToOffset(customOffsetLocator, 0.7),
+			]);
+		});
+
+		test.only('elements may have offsets dynamically set', async ({ page }) => {
+			await page.goto('/tests/fixtures/integration.html');
+
+			const locator = page.locator('scroll-scene');
+
+			// smoke test to confirm default works
+			await Promise.all([
+				locator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-enter', resolve, {
+								once: true,
+							}),
+						),
+				),
+				scrollTopOfElementToOffset(locator, 0.5),
+			]);
+
+			// reset our scroll position
+			await scrollToTop(page);
+			// set the offset with assignment
+			await locator.evaluate(
+				(element: ScrollSceneElement) => (element.offset = 0.6),
+			);
+
+			// confirm an offset can be set dynamically
+			await Promise.all([
+				locator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-enter', resolve, {
+								once: true,
+							}),
+						),
+				),
+				scrollTopOfElementToOffset(locator, 0.6),
+			]);
+
+			// reset our scroll position
+			await scrollToTop(page);
+			// set the offset with setAttribute
+			await locator.evaluate((element: ScrollSceneElement) =>
+				element.setAttribute('offset', '0.7'),
+			);
+
+			// confirm an offset can be set dynamically
+			await Promise.all([
+				locator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-enter', resolve, {
+								once: true,
+							}),
+						),
+				),
+				scrollTopOfElementToOffset(locator, 0.7),
 			]);
 		});
 	});

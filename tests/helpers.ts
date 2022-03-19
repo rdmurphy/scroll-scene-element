@@ -1,5 +1,5 @@
 // types
-import type { Locator } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 export function scrollTopOfElementToOffset(locator: Locator, offset: number) {
 	return locator.evaluate((element, offset) => {
@@ -28,6 +28,15 @@ export function scrollAboveElement(locator: Locator) {
 	});
 }
 
+export async function scrollToTop(page: Page) {
+	await page.evaluate(() => {
+		window.scrollTo(0, 0);
+	});
+
+	// don't love it but gotta wait for the scroll to finish
+	return tick(page);
+}
+
 export function scrollBelowElement(locator: Locator) {
 	return locator.evaluate((element) => {
 		window.scrollTo(
@@ -38,4 +47,8 @@ export function scrollBelowElement(locator: Locator) {
 				window.innerHeight / 2,
 		);
 	});
+}
+
+export function tick(page: Page) {
+	return page.evaluate(() => new Promise(requestAnimationFrame));
 }
