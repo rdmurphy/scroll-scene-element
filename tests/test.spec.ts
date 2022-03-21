@@ -68,6 +68,46 @@ test.describe('scroll-scene', () => {
 			]);
 		});
 
+		test.only('confirm return values in event', async ({ page }) => {
+			await page.goto('/tests/fixtures/integration.html');
+
+			const locator = page.locator('scroll-scene');
+
+			const [detail] = await Promise.all([
+				locator.evaluateHandle(
+					(element: ScrollSceneElement) =>
+						new Promise((resolve) =>
+							element.addEventListener('scroll-scene-enter', (event) => {
+								resolve((event as CustomEvent).detail);
+							}),
+						),
+				),
+				scrollToTopOfElement(locator),
+			]);
+
+			// bounds
+			const isDOMRectReadOnly = await detail.evaluate((detail) => {
+				return detail.bounds instanceof DOMRectReadOnly;
+			});
+			expect(isDOMRectReadOnly).toBe(true);
+
+			// isScrollingDown
+			const isScrollingDown = await detail.evaluate(
+				(detail) => detail.isScrollingDown,
+			);
+			expect(isScrollingDown).toBe(true);
+
+			// element
+			const isSameElement = await locator.evaluate((element, detail) => {
+				return element === detail.element;
+			}, detail);
+			expect(isSameElement).toBe(true);
+
+			// offset
+			const offset = await detail.evaluate((detail) => detail.offset);
+			expect(offset).toBe(0.5);
+		});
+
 		test('elements may have have custom offsets', async ({ page }) => {
 			await page.goto('/tests/fixtures/offset.html');
 
@@ -97,7 +137,7 @@ test.describe('scroll-scene', () => {
 			]);
 		});
 
-		test.only('elements may have offsets dynamically set', async ({ page }) => {
+		test('elements may have offsets dynamically set', async ({ page }) => {
 			await page.goto('/tests/fixtures/integration.html');
 
 			const locator = page.locator('scroll-scene');

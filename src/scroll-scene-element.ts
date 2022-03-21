@@ -10,8 +10,9 @@ function createOffsetObserver(offset: number) {
 			previousScrollDepth = scrollDepth;
 
 			for (const entry of entries) {
-				const element = entry.target as HTMLElement;
+				const element = entry.target as ScrollSceneElement;
 				const bounds = entry.boundingClientRect;
+				const offset = element.offset;
 
 				const event = entry.isIntersecting ? 'enter' : 'exit';
 
@@ -22,6 +23,7 @@ function createOffsetObserver(offset: number) {
 							bounds,
 							isScrollingDown,
 							element,
+							offset,
 						},
 					}),
 				);
@@ -90,7 +92,7 @@ class ScrollSceneElement extends HTMLElement {
 	}
 
 	get offset() {
-		return Number.parseFloat(this.getAttribute('offset') || '0.5');
+		return Number.parseFloat(this.getAttribute('offset')) || 0.5;
 	}
 
 	set offset(value: number) {
