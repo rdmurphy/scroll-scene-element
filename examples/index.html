@@ -15,6 +15,10 @@
     document.addEventListener('scroll-scene-exit', ({ detail }) => {
       detail.element.classList.remove('active');
     });
+
+    document.addEventListener('scroll-scene-progress', ({ detail }) => {
+      detail.element.textContent = `Progress: ${detail.progress}`;
+    });
   </script>
   <style>
     body {
@@ -55,7 +59,7 @@
 <body>
   <scroll-scene>Scene 1</scroll-scene>
   <scroll-scene offset="0.7">Scene 2</scroll-scene>
-  <scroll-scene>Scene 3</scroll-scene>
+  <scroll-scene progress>Scene 3</scroll-scene>
 
   <div class="midpoint"></div>
 

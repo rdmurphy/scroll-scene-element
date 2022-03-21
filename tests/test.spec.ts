@@ -7,6 +7,7 @@ import {
 	scrollTopOfElementToOffset,
 	scrollToTop,
 	scrollToTopOfElement,
+	scrollWindowToElementOffsetDepth,
 } from './helpers';
 
 // types
@@ -193,6 +194,85 @@ test.describe('scroll-scene', () => {
 						),
 				),
 				scrollTopOfElementToOffset(locator, 0.7),
+			]);
+		});
+
+		test('elements may opt-in to progress events', async ({ page }) => {
+			await page.goto('/tests/fixtures/progress.html');
+
+			const locator = page.locator('scroll-scene');
+			const offset = 0.5;
+			const depth = 0.75;
+
+			// confirm progress events begin once the offset is reached
+			await Promise.all([
+				locator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener(
+								'scroll-scene-progress',
+								function progress(event) {
+									if ((event as CustomEvent).detail.progress === 0) {
+										element.removeEventListener(
+											'scroll-scene-progress',
+											progress,
+										);
+										resolve(true);
+									}
+								},
+							),
+						),
+				),
+				scrollWindowToElementOffsetDepth(locator, offset, 0),
+			]);
+
+			// make sure progress events continue as you scroll
+			await Promise.all([
+				locator.evaluate(
+					(element, depth) =>
+						new Promise((resolve) =>
+							element.addEventListener(
+								'scroll-scene-progress',
+								function progress(event) {
+									const detail = (event as CustomEvent).detail;
+
+									if (detail.progress >= depth) {
+										element.removeEventListener(
+											'scroll-scene-progress',
+											progress,
+										);
+										resolve(true);
+									}
+								},
+							),
+						),
+					depth,
+				),
+				scrollWindowToElementOffsetDepth(locator, offset, 0.75),
+			]);
+
+			// make sure it maxes out at 1
+			await Promise.all([
+				locator.evaluate(
+					(element) =>
+						new Promise((resolve) =>
+							element.addEventListener(
+								'scroll-scene-progress',
+								function progress(event) {
+									const detail = (event as CustomEvent).detail;
+
+									if (detail.progress === 1) {
+										element.removeEventListener(
+											'scroll-scene-progress',
+											progress,
+										);
+										resolve(true);
+									}
+								},
+							),
+						),
+				),
+				scrollBelowElement(locator),
 			]);
 		});
 	});

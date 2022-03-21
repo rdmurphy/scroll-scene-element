@@ -1,4 +1,7 @@
 const offsetObservers = new Map<number, IntersectionObserver>();
+type ProgressCommands = { on: () => void; off: () => void };
+const progressListeners = new WeakMap<ScrollSceneElement, ProgressCommands>();
+
 let previousScrollDepth = 0;
 let isScrollingDown = false;
 
@@ -13,11 +16,26 @@ function createOffsetObserver(offset: number) {
 				const element = entry.target as ScrollSceneElement;
 				const bounds = entry.boundingClientRect;
 				const offset = element.offset;
+				const progress = element.progress;
+				const isIntersecting = entry.isIntersecting;
 
-				const event = entry.isIntersecting ? 'enter' : 'exit';
+				if (progress) {
+					let commands = progressListeners.get(element);
+
+					if (!commands) {
+						commands = observeProgress(element);
+						progressListeners.set(element, commands);
+					}
+
+					if (isIntersecting) {
+						commands.on();
+					} else {
+						commands.off();
+					}
+				}
 
 				element.dispatchEvent(
-					new CustomEvent(`scroll-scene-${event}`, {
+					new CustomEvent(`scroll-scene-${isIntersecting ? 'enter' : 'exit'}`, {
 						bubbles: true,
 						detail: {
 							bounds,
@@ -33,6 +51,46 @@ function createOffsetObserver(offset: number) {
 			rootMargin: `${-100 * (1 - offset)}% 0px ${-100 * offset}%`,
 		},
 	);
+}
+
+function observeProgress(element: ScrollSceneElement): ProgressCommands {
+	/**
+	 * Called on each scroll event.
+	 */
+	function scroll() {
+		const bounds = element.getBoundingClientRect();
+		const offset = element.offset;
+		const top = bounds.top;
+		const bottom = bounds.bottom;
+		// ensure progress is never less than 0 or greater than 1
+		const progress = Math.max(
+			0,
+			Math.min((window.innerHeight * offset - top) / (bottom - top), 1),
+		);
+
+		element.dispatchEvent(
+			new CustomEvent('scroll-scene-progress', {
+				bubbles: true,
+				detail: {
+					bounds,
+					element,
+					progress,
+					offset,
+				},
+			}),
+		);
+	}
+
+	return {
+		on() {
+			// initial hit
+			scroll();
+			window.addEventListener('scroll', scroll, false);
+		},
+		off() {
+			window.removeEventListener('scroll', scroll, false);
+		},
+	};
 }
 
 class ScrollSceneElement extends HTMLElement {
@@ -56,7 +114,7 @@ class ScrollSceneElement extends HTMLElement {
 	}
 
 	static get observedAttributes() {
-		return ['offset'];
+		return ['offset', 'progress'];
 	}
 
 	get offset() {
@@ -65,6 +123,18 @@ class ScrollSceneElement extends HTMLElement {
 
 	set offset(value: number) {
 		this.setAttribute('offset', value.toString());
+	}
+
+	get progress() {
+		return this.hasAttribute('progress');
+	}
+
+	set progress(value: boolean) {
+		if (value) {
+			this.setAttribute('progress', '');
+		} else {
+			this.removeAttribute('progress');
+		}
 	}
 
 	private _connectToObserver(offset: number) {

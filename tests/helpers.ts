@@ -16,6 +16,26 @@ export function scrollToTopOfElement(locator: Locator) {
 	return scrollTopOfElementToOffset(locator, 0.5);
 }
 
+export function scrollWindowToElementOffsetDepth(
+	locator: Locator,
+	offset: number,
+	depth: number,
+) {
+	return locator.evaluate(
+		(element, [offset, depth]) => {
+			const bounds = element.getBoundingClientRect();
+			window.scrollTo(
+				0,
+				bounds.top +
+					bounds.height * depth +
+					window.scrollY -
+					window.innerHeight * (1 - offset),
+			);
+		},
+		[offset, depth],
+	);
+}
+
 export function scrollAboveElement(locator: Locator) {
 	return locator.evaluate((element) => {
 		window.scrollTo(

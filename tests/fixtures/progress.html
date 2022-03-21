@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Offset</title>
+  <title>Progress</title>
   <script src="/dist/index.modern.js" type="module"></script>
   <style>
     body {
@@ -13,6 +13,7 @@
     }
 
     scroll-scene {
+      display: block;
       height: 500px;
       width: 100%;
     }
@@ -23,7 +24,6 @@
   </style>
 </head>
 <body>
-  <scroll-scene>Scene 1</scroll-scene>
-  <scroll-scene offset="0.7">Scene 2</scroll-scene>
+  <scroll-scene progress>Scene 1</scroll-scene>
 </body>
 </html>
