@@ -68,7 +68,7 @@ test.describe('scroll-scene', () => {
 			]);
 		});
 
-		test.only('confirm return values in event', async ({ page }) => {
+		test('confirm return values in event', async ({ page }) => {
 			await page.goto('/tests/fixtures/integration.html');
 
 			const locator = page.locator('scroll-scene');

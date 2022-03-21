@@ -9,12 +9,10 @@
     import '../dist/index.modern.js';
 
     document.addEventListener('scroll-scene-enter', ({ detail }) => {
-      console.log(detail);
       detail.element.classList.add('active');
     });
 
     document.addEventListener('scroll-scene-exit', ({ detail }) => {
-      console.log(detail);
       detail.element.classList.remove('active');
     });
   </script>
