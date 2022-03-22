@@ -3,8 +3,8 @@
 	"type": "module",
 	"version": "0.0.0",
 	"description": "A custom element for orchestrating scrollytelling elements.",
-	"main": "./dist/index.js",
-	"exports": "./dist/index.js",
+	"main": "./dist/scroll-scene-element.js",
+	"exports": "./dist/scroll-scene-element.js",
 	"types": "./dist/scroll-scene-element.d.ts",
 	"scripts": {
 		"build": "microbundle src/scroll-scene-element.ts --format modern",
