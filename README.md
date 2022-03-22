@@ -7,7 +7,7 @@ A tiny custom element for all your scrollytelling needs! The successor to [`@new
 - 🐜 **Less than 700 bytes** brotli'ed, **less than 800 bytes** gzip'ed
 - 👀 Uses a highly-performant **[Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)** to monitor scrolling changes
 - 📚 Smartly uses scroll events to **calculate scroll progress** only when needed
-- 🌻 Each `<scroll-scene>` element can **have its own** `offset` and **opt-in** to `progress` events
+- 🌻 Each `<scroll-scene>` element may **have its own** `offset` and **opt-in** to `progress` events
 - 🙅🏽‍ **No dependencies**
 
 ## Installation
@@ -47,9 +47,9 @@ Then in your HTML add `<scroll-scene>` container elements around every "scene" y
 </div>
 ```
 
-If you have experience with [Scrollama](https://github.com/russellgoldenberg/scrollama) or [`@newswire/scroller`](https://github.com/rdmurphy/scroller) you may be surprised to learn there's no "init" step. Thanks to custom elements the initalization happens automatically just by using `<scroll-scene>`. Of course you do still need JavaScript to listen to for the events!
+If you have experience with [Scrollama](https://github.com/russellgoldenberg/scrollama) or [`@newswire/scroller`](https://github.com/rdmurphy/scroller) you may be surprised to learn there's no "init" step. Thanks to custom elements the initalization happens automatically just by using `<scroll-scene>`. Of course you do still need JavaScript to listen for the events!
 
-Events with `<scroll-scene>` work just like others in JavaScript. This gives you a ton of flexibility (and familiarity). The `scroll-scene-enter`, `scroll-scene-exit` and `scroll-scene-progress` events all bubble up to `document`. If you know there will only be a single set of `<scroll-scene>` elements on a page you can listen on `document` directly:
+Events with `<scroll-scene>` work just like others in JavaScript providing a ton of flexibility. (And familiarity!) The `scroll-scene-enter`, `scroll-scene-exit` and `scroll-scene-progress` events all bubble up to `document`. If you know there will only be a single set of `<scroll-scene>` elements on a page you may listen on `document` directly:
 
 ```js
 document.addEventListener('scroll-scene-enter', (event) => {
@@ -73,7 +73,7 @@ document.addEventListener('scroll-scene-enter', (event) => {
 });
 ```
 
-But maybe you have more than one set of `<scroll-scene>` elements on a page? You can instead attach your listener to a parent element of each set of `<scroll-scene>` elements:
+But what if you have more than one set of `<scroll-scene>` elements on a page? You might instead attach your listener to a parent element of each set of `<scroll-scene>` elements:
 
 ```js
 const container = document.querySelector('.scrollytelling-container');
@@ -89,7 +89,7 @@ container.addEventListener('scroll-scene-enter', (event) => {
 });
 ```
 
-And finally - you can attach your listener to each `<scroll-scene>` element individually:
+And finally - you may attach your listener to each `<scroll-scene>` element individually:
 
 ```js
 const scenes = document.querySelectorAll('scroll-scene');
@@ -192,7 +192,7 @@ scene.setAttribute('progress', '');
 
 ### Viewport events
 
-**`scroll-scene-enter`** is emit when an element enters the viewport. **`scroll-scene-exit`** is emitted when an element exits the viewport. Both events bubble up to `document`. They both have a `detail` property that contains the following:
+**`scroll-scene-enter`** is emit when an element enters the viewport. **`scroll-scene-exit`** is emit when an element exits the viewport. Both events bubble up to `document`. They both have a `detail` property that contains the following:
 
 - `bounds`: the bounds ([`DOMRectReadOnly`](https://developer.mozilla.org/en-US/docs/Web/API/DOMRectReadOnly)) of the triggering element as made available within the `IntersectionObserver` callback
 - `element`: the triggering element
