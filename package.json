@@ -6,6 +6,7 @@
 	"main": "./dist/scroll-scene-element.js",
 	"exports": "./dist/scroll-scene-element.js",
 	"types": "./dist/scroll-scene-element.d.ts",
+	"files": ["dist"],
 	"scripts": {
 		"build": "microbundle src/scroll-scene-element.ts --format modern",
 		"clean": "premove dist",
