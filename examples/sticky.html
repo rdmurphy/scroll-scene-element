@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>scroll-scene progress</title>
+  <style>
+    html {
+      box-sizing: border-box;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0 0 75vh;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 600px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .intro-text {
+      margin-bottom: 30vh;
+    }
+
+    .intro-text p {
+      line-height: 1.5;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 600px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .scroller-container {
+      margin-bottom: 75vh;
+      padding-left: -1rem;
+      padding-right: -1rem;
+    }
+
+    .scroller-container__column {
+      width: 100%;
+    }
+
+    .scroller-items {
+      width: 100%;
+    }
+
+    .scroller-items > scroll-scene {
+      align-items: center;
+      font-family: monospace;
+      background-color: lightyellow;
+      color: grey;
+      display: flex;
+      font-size: 1.25rem;
+      text-align: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .scroller-items > scroll-scene.active {
+      background-color: paleturquoise;
+    }
+
+    .graphic {
+      background-color: hsla(0, 0%, 83%, 75%);
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      font-size: 1.5rem;
+      height: 300px;
+      width: 100%;
+      top: 25%;
+      position: fixed;
+    }
+
+    .sticky-top {
+      z-index: 1020 !important;
+    }
+
+    @media screen and (min-width: 34em) {
+      .scroller-container {
+        display: flex;
+        position: relative;
+      }
+
+      .scroller-items {
+        width: 450px;
+      }
+
+      .scroller-container__column {
+        padding-right: 1rem;
+        padding-left: 1rem;
+        position: relative;
+      }
+
+      .sticky-top {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 12.5%;
+      }
+
+      .graphic {
+        height: 75vh;
+      }
+    }
+
+    .midpoint {
+      border-top: 2px dotted black;
+      height: 0px;
+      left: 0px;
+      position: fixed;
+      width: 100%;
+      z-index: 9000;
+    }
+  </style>
+  <script src="/dist/index.modern.js" type="module"></script>
+  <script type="module">
+    const offset = 0.5;
+
+    function getRandomIntInclusive(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min; // The maximum is inclusive and the minimum is inclusive
+    }
+
+    const container = document.querySelector('.scroller-container');
+    const graphic = document.querySelector('.graphic');
+    const scenesContainer = document.querySelector('.scroller-items');
+    const scenes = Array.from(scenesContainer.querySelectorAll('scroll-scene'));
+
+    scenes.forEach((scene) => {
+      scene.style.padding = getRandomIntInclusive(200, 400) + 'px 0';
+    })
+
+    document.querySelector('.midpoint').style.top = (1 - offset) * 100 + '%';
+
+    scenesContainer.addEventListener('scroll-scene-enter', ({ detail }) => {
+      const index = scenes.indexOf(detail.element);
+      detail.element.classList.add('active');
+      graphic.textContent = 'Scene Graphic ' + (index + 1);
+    });
+
+    scenesContainer.addEventListener('scroll-scene-exit', ({ detail }) => {
+      detail.element.classList.remove('active');
+    });
+
+    container.addEventListener('scroll-scene-exit', (event) => {
+      if (event.target === container) {
+        graphic.textContent = 'Waiting to be activated';
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>scroll-scene sticky example</h1>
+  <div class="intro-text">
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet modi
+      accusamus fuga, itaque assumenda repellat cumque minus sunt voluptatibus
+      officia corrupti voluptatem aut explicabo dignissimos recusandae
+      nesciunt similique? Praesentium tempore maiores officiis assumenda
+      similique ipsam amet, magnam possimus modi. Totam, laborum. Aut harum
+      est, consequatur quas rerum explicabo ad ut.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident non
+      sequi eveniet ea aliquam dolorem vel perspiciatis voluptatem sapiente,
+      consequuntur, iste eligendi. Excepturi aspernatur maxime sed. Autem
+      consectetur maxime non nostrum, aspernatur sint ex minima maiores unde
+      odit obcaecati fugit cumque minus laboriosam, exercitationem
+      voluptatibus.
+    </p>
+  </div>
+
+  <scroll-scene class="scroller-container">
+    <div class="scroller-items scroller-container__column">
+      <scroll-scene>Scene 1</scroll-scene>
+      <scroll-scene>Scene 2</scroll-scene>
+      <scroll-scene>Scene 3</scroll-scene>
+      <scroll-scene>Scene 4</scroll-scene>
+      <scroll-scene>Scene 5</scroll-scene>
+      <scroll-scene>Scene 6</scroll-scene>
+      <scroll-scene>Scene 7</scroll-scene>
+      <scroll-scene>Scene 8</scroll-scene>
+    </div>
+    <div class="scroller-visual scroller-container__column">
+      <div class="graphic sticky-top"></div>
+    </div>
+  </scroll-scene>
+
+  <div class="midpoint"></div>
+</body>
+</html>
