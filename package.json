@@ -2,11 +2,13 @@
 	"name": "scroll-scene-element",
 	"type": "module",
 	"version": "0.0.0",
-	"description": "A custom element for orchestrating scrollytelling elements.",
+	"description": "A tiny custom element for all your scrollytelling needs.",
 	"main": "./dist/scroll-scene-element.js",
 	"exports": "./dist/scroll-scene-element.js",
 	"types": "./dist/scroll-scene-element.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "microbundle src/scroll-scene-element.ts --format modern",
 		"clean": "premove dist",
@@ -20,7 +22,13 @@
 		"type": "git",
 		"url": "git+https://github.com/rdmurphy/scroll-scene-element.git"
 	},
-	"keywords": [],
+	"keywords": [
+		"scrollytelling",
+		"interactive",
+		"graphic",
+		"custom-elements",
+		"web-components"
+	],
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/rdmurphy/scroll-scene-element/issues"
