@@ -53,6 +53,26 @@ function createOffsetObserver(offset: number) {
 	);
 }
 
+function connectToObserver(element: ScrollSceneElement, offset: number) {
+	let observer = offsetObservers.get(offset);
+
+	if (!observer) {
+		observer = createOffsetObserver(offset);
+		offsetObservers.set(offset, observer);
+	}
+
+	observer.observe(element);
+}
+
+function disconnectFromObserver(element: ScrollSceneElement, offset: number) {
+	const observer = offsetObservers.get(offset);
+
+	// Is there a race-condition scenario where this does not exist? Not sure.
+	if (observer) {
+		observer.unobserve(element);
+	}
+}
+
 function observeProgress(element: ScrollSceneElement): ProgressCommands {
 	/**
 	 * Called on each scroll event.
@@ -95,11 +115,11 @@ function observeProgress(element: ScrollSceneElement): ProgressCommands {
 
 class ScrollSceneElement extends HTMLElement {
 	connectedCallback() {
-		this._connectToObserver(this.offset);
+		connectToObserver(this, this.offset);
 	}
 
 	disconnectedCallback() {
-		this._disconnectFromObserver(this.offset);
+		disconnectFromObserver(this, this.offset);
 	}
 
 	attributeChangedCallback(attribute: string, previousValue: string) {
@@ -107,8 +127,8 @@ class ScrollSceneElement extends HTMLElement {
 			const previousOffset = Number.parseFloat(previousValue);
 
 			if (previousOffset !== this.offset) {
-				this._disconnectFromObserver(previousOffset);
-				this._connectToObserver(this.offset);
+				disconnectFromObserver(this, previousOffset);
+				connectToObserver(this, this.offset);
 			}
 		}
 	}
@@ -134,26 +154,6 @@ class ScrollSceneElement extends HTMLElement {
 			this.setAttribute('progress', '');
 		} else {
 			this.removeAttribute('progress');
-		}
-	}
-
-	private _connectToObserver(offset: number) {
-		let observer = offsetObservers.get(offset);
-
-		if (!observer) {
-			observer = createOffsetObserver(offset);
-			offsetObservers.set(offset, observer);
-		}
-
-		observer.observe(this);
-	}
-
-	private _disconnectFromObserver(offset: number) {
-		const observer = offsetObservers.get(offset);
-
-		// Is there a race-condition scenario where this does not exist? Not sure.
-		if (observer) {
-			observer.unobserve(this);
 		}
 	}
 }
