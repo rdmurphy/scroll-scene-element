@@ -47,9 +47,9 @@ Then in your HTML add `<scroll-scene>` container elements around every "scene" y
 </div>
 ```
 
-If you have experience with [Scrollama](https://github.com/russellgoldenberg/scrollama) or [`@newswire/scroller`](https://github.com/rdmurphy/scroller) you may be surprised to learn there's no "init" step. Thanks to custom elements the initalization happens automatically just by using `<scroll-scene>`.
+If you have experience with [Scrollama](https://github.com/russellgoldenberg/scrollama) or [`@newswire/scroller`](https://github.com/rdmurphy/scroller) you may be surprised to learn there's no "init" step. Thanks to custom elements the initalization happens automatically just by using `<scroll-scene>`. Of course you do still need JavaScript to listen to for the events!
 
-Of course you do still need JavaScript to listen to for the events! Events with `<scroll-scene>` work just like others in JavaScript. This provides you a ton of flexibility (and familiarity). The `scroll-scene-enter`, `scroll-scene-exit` and `scroll-scene-progress` events all bubble up to `document`. If you know there will only be a single set of `<scroll-scene>` elements on a page you can listen on `document` directly:
+Events with `<scroll-scene>` work just like others in JavaScript. This gives you a ton of flexibility (and familiarity). The `scroll-scene-enter`, `scroll-scene-exit` and `scroll-scene-progress` events all bubble up to `document`. If you know there will only be a single set of `<scroll-scene>` elements on a page you can listen on `document` directly:
 
 ```js
 document.addEventListener('scroll-scene-enter', (event) => {
