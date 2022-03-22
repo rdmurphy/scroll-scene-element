@@ -57,7 +57,7 @@ _or_
 
 <!-- prettier-ignore -->
 ```html
-<script src="https://unpkg.com/scroll-scene-element/dist/index.js" type="module"></script>
+<script src="https://unpkg.com/scroll-scene-element/dist/scroll-scene-element.js" type="module"></script>
 ```
 
 If you have experience with [Scrollama](https://github.com/russellgoldenberg/scrollama) or [`@newswire/scroller`](https://github.com/rdmurphy/scroller) it may be surprising that there's no "init" step. Thanks to custom elements the initalization happens automatically just by using `<scroll-scene>`.
