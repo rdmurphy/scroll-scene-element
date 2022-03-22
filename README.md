@@ -10,6 +10,12 @@ A tiny custom element for all your scrollytelling needs! The successor to [`@new
 - 🌻 Each `<scroll-scene>` element may **have its own** `offset` and **opt-in** to `progress` events
 - 🙅🏽‍ **No dependencies**
 
+## Examples
+
+- [Basic usage](https://rdmurphy.github.io/scroll-scene-element/basic)
+- [Sticky graphics](https://rdmurphy.github.io/scroll-scene-element/sticky)
+- [Progress events](https://rdmurphy.github.io/scroll-scene-element/progress)
+
 ## Installation
 
 ```sh
@@ -22,13 +28,7 @@ pnpm add scroll-scene-element
 
 ## Usage
 
-Import it as a module in your bundle to upgrade your `<scroll-scene>` elements:
-
-```js
-import 'scroll-scene-element';
-```
-
-Then in your HTML add `<scroll-scene>` container elements around every "scene" you want to track the progression of in your interactive. Feel free to use these elements as the containers of your graphics or other dynamic content - all progression and scroll depth changes will be tracked automatically.
+In your HTML add `<scroll-scene>` container elements around every "scene" you want to track the progression of in your interactive. Feel free to use these elements as the containers of your graphics or other dynamic content and style them as needed - all progression and scroll depth changes will be tracked on the tag and its contents.
 
 ```html
 <div class="scrollytelling-container">
@@ -47,9 +47,22 @@ Then in your HTML add `<scroll-scene>` container elements around every "scene" y
 </div>
 ```
 
-If you have experience with [Scrollama](https://github.com/russellgoldenberg/scrollama) or [`@newswire/scroller`](https://github.com/rdmurphy/scroller) you may be surprised to learn there's no "init" step. Thanks to custom elements the initalization happens automatically just by using `<scroll-scene>`. Of course you do still need JavaScript to listen for the events!
+Then import the script as an ES module in your bundle or load via a script tag to upgrade the `<scroll-scene>` elements:
 
-Events with `<scroll-scene>` work just like others in JavaScript providing a ton of flexibility. (And familiarity!) The `scroll-scene-enter`, `scroll-scene-exit` and `scroll-scene-progress` events all bubble up to `document`. If you know there will only be a single set of `<scroll-scene>` elements on a page you may listen on `document` directly:
+```js
+import 'scroll-scene-element';
+```
+
+_or_
+
+<!-- prettier-ignore -->
+```html
+<script src="https://unpkg.com/scroll-scene-element/dist/index.js" type="module"></script>
+```
+
+If you have experience with [Scrollama](https://github.com/russellgoldenberg/scrollama) or [`@newswire/scroller`](https://github.com/rdmurphy/scroller) it may be surprising that there's no "init" step. Thanks to custom elements the initalization happens automatically just by using `<scroll-scene>`.
+
+Events with `<scroll-scene>` work just like others in JavaScript giving you the same amount of flexibility. (And familiarity!) `scroll-scene-enter`, `scroll-scene-exit` and `scroll-scene-progress` all bubble up to `document`. If you know there will only be a single set of `<scroll-scene>` elements on a page you may listen on `document` directly:
 
 ```js
 document.addEventListener('scroll-scene-enter', (event) => {
@@ -148,7 +161,7 @@ scene.addEventListener('scroll-scene-progress', (event) => {
 	// the triggering element
 	const element = event.element;
 
-	// just like in standard DOM events, "target" is also the triggering element
+	// `event.target` is also the triggering element, just like in standard DOM events
 	const target = event.target;
 
 	// the bounds of the triggering element
@@ -199,7 +212,7 @@ scene.setAttribute('progress', '');
 - `isScrollingDown`: whether the page was scrolling up or down when the event was triggered
 - `offset`: the offset used for this element
 
-### Progress events
+### Progress event
 
 **`scroll-scene-progress`** is emitted when the progress of an element changes. It bubbles up to `document` and has a `detail` property that contains the following:
 

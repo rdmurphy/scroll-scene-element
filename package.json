@@ -16,7 +16,7 @@
 		"pretest": "npm run build",
 		"start": "sirv . --dev --port 3000",
 		"test": "playwright test",
-		"watch": "microbundle watch src/scroll-scene-element.ts --format modern,esm,umd --no-compress"
+		"watch": "microbundle watch src/scroll-scene-element.ts --format modern --no-compress"
 	},
 	"repository": {
 		"type": "git",
