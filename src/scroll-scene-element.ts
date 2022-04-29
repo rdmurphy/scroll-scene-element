@@ -1,3 +1,4 @@
+const DEFAULT_OFFSET = 0.5;
 const offsetObservers = new Map<number, IntersectionObserver>();
 type ProgressCommands = { on: () => void; off: () => void };
 const progressListeners = new WeakMap<ScrollSceneElement, ProgressCommands>();
@@ -122,9 +123,9 @@ class ScrollSceneElement extends HTMLElement {
 		disconnectFromObserver(this, this.offset);
 	}
 
-	attributeChangedCallback(attribute: string, previousValue: string) {
+	attributeChangedCallback(attribute: string, oldValue: string) {
 		if (attribute === 'offset') {
-			const previousOffset = Number.parseFloat(previousValue);
+			const previousOffset = Number.parseFloat(oldValue) || DEFAULT_OFFSET;
 
 			if (previousOffset !== this.offset) {
 				disconnectFromObserver(this, previousOffset);
@@ -138,7 +139,7 @@ class ScrollSceneElement extends HTMLElement {
 	}
 
 	get offset() {
-		return Number.parseFloat(this.getAttribute('offset')) || 0.5;
+		return Number.parseFloat(this.getAttribute('offset')) || DEFAULT_OFFSET;
 	}
 
 	set offset(value: number) {
