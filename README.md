@@ -4,7 +4,7 @@ A tiny custom element for all your scrollytelling needs! The successor to [`@new
 
 ## Key features
 
-- 🐜 **Less than 700 bytes** brotli'ed, **less than 800 bytes** gzip'ed
+- 🐜 **~700 bytes** brotli'ed, **~800 bytes** gzip'ed
 - 👀 Uses a highly-performant **[Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)** to monitor scrolling changes
 - 📚 Smartly uses scroll events to **calculate scroll progress** only when needed
 - 🌻 Each `<scroll-scene>` element may **have its own** `offset` and **opt-in** to `progress` events

@@ -86,7 +86,7 @@ function observeProgress(element: ScrollSceneElement): ProgressCommands {
 		// ensure progress is never less than 0 or greater than 1
 		const progress = Math.max(
 			0,
-			Math.min((window.innerHeight * offset - top) / (bottom - top), 1),
+			Math.min((window.innerHeight * (1 - offset) - top) / (bottom - top), 1),
 		);
 
 		element.dispatchEvent(
