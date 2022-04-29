@@ -1,7 +1,7 @@
 {
 	"name": "scroll-scene-element",
 	"type": "module",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "A tiny custom element for all your scrollytelling needs.",
 	"main": "./dist/scroll-scene-element.js",
 	"exports": "./dist/scroll-scene-element.js",
